@@ -9,8 +9,8 @@
 | Field | Details |
 |---|---|
 | **Student Name** | Abdul Samad Khan |
-| **Registration Number** | *(Your Reg No. — e.g. 24BXX00000)* |
-| **Slot** | *(Your slot)* |
+| **Registration Number** | *(Fill your reg. no.)* |
+| **Slot** | *(Fill your slot)* |
 | **Date of Submission** | March 2026 |
 
 ---
@@ -22,10 +22,23 @@
 **Category:** Version Control System
 **Official Site:** https://git-scm.com
 
-> *"I'm doing a free operating system — just a hobby, won't be big and professional like GNU."*
-> — Linus Torvalds, 1991 (about Linux, which later led to creating Git in 2005)
+> *"I'm doing a (free) operating system — just a hobby, won't be big and professional like GNU."*
+> — Linus Torvalds, 1991. He later built Git in 2005 for the same reason: freedom from proprietary tools.
 
-Git is the version control system Linus Torvalds wrote **in two weeks** in 2005 after BitKeeper — the proprietary tool the Linux kernel team had been using — revoked free access. Rather than surrender to a proprietary tool, Torvalds built his own and released it under the GPL. Today, Git is used by virtually every software project on earth.
+Git is the version control system Linus Torvalds wrote in approximately **ten days** in April 2005, after BitKeeper — the proprietary VCS the Linux kernel team had been using — revoked free access. Rather than accept dependence on another proprietary tool, Torvalds built his own and released it under the GPL v2. Today, Git underpins virtually every software project on earth.
+
+---
+
+## 💻 Environment
+
+These scripts were developed and tested on **Windows 11 using Git Bash** — the Unix-compatible shell that ships with Git for Windows. Git Bash provides a POSIX-compliant Bash environment on Windows, giving access to standard Linux commands (`grep`, `awk`, `ls`, `du`, `uname`, `whoami`, `date`, etc.) without needing a full Linux installation or virtual machine.
+
+> **Why Git Bash?**
+> Git Bash is the most practical Linux-like environment available to students on Windows. It runs the same Bash shell used on Linux servers, making these scripts fully portable — they will run identically on Ubuntu, Debian, Kali, or any system with Bash installed.
+
+**Shell:** GNU Bash (bundled with Git for Windows)
+**Tested on:** Windows 11 + Git Bash 2.x
+**Also compatible with:** Ubuntu, Debian, Kali Linux, WSL2
 
 ---
 
@@ -47,43 +60,45 @@ oss-audit-[rollnumber]/
 ## 📜 Script Descriptions
 
 ### Script 1 — System Identity Report
-Displays a formatted welcome screen showing: Linux distro, kernel version, logged-in user, home directory, system uptime, CPU architecture, current date/time, and a message about the GPL license covering the OS.
+Displays a formatted welcome screen showing the OS environment, kernel/shell version, logged-in user, home directory, system uptime, CPU architecture, current date/time, and a message about the GPL licence covering the OS. Works on both Git Bash (Windows) and native Linux.
 
-**Concepts used:** Variables, `echo`, command substitution `$()`, `lsb_release`, `uname`, `whoami`, `hostname`, `date`, `uptime`
+**Concepts used:** Variables, `echo`, command substitution `$()`, `uname`, `whoami`, `hostname`, `date`, `uptime`, `/etc/os-release`
 
 ---
 
 ### Script 2 — FOSS Package Inspector
-Detects whether Git is installed on the system using `dpkg` (Debian/Ubuntu) or `rpm` (Fedora/RHEL), fetches its version and description, and uses a `case` statement to print a philosophy note about Git and four other major FOSS tools.
+Detects whether Git is installed, checks using `dpkg` (Debian/Ubuntu) or `rpm` (Fedora/RHEL) if available, and falls back to `command -v git` for Git Bash on Windows. Uses a `case` statement to print philosophy notes for Git and four other major FOSS tools.
 
-**Concepts used:** `if-then-else`, `case` statement, `dpkg -s`, `rpm -qi`, pipe with `grep`, `command -v`
+**Concepts used:** `if-then-elif-else`, `case` statement, `dpkg -s`, `rpm -qi`, `command -v`, pipe with `grep`
 
 ---
 
 ### Script 3 — Disk and Permission Auditor
-Loops through 6 important system directories (including Git's documentation directory `/usr/share/doc/git`) and reports permissions, ownership, and disk usage. Also checks for Git's global config file (`~/.gitconfig`) and config directory.
+Loops through key system directories and checks Git's global configuration file (`~/.gitconfig`). Reports permissions, ownership, and disk usage for each. On Git Bash, paths like `/etc` map to Git's installation directory — the script handles both environments gracefully.
 
-**Concepts used:** `for` loop, arrays, `if-then-else`, `ls -ld`, `du -sh`, `awk`, `cut`
+**Concepts used:** `for` loop, arrays, `if-then-else`, `ls -ld`, `du -sh`, `awk '{print $1,$3}'`, `cut -f1`
 
 ---
 
 ### Script 4 — Log File Analyzer
-Reads a log file line by line, counts keyword occurrences (default: `error`), and prints the last 5 matching lines. Includes robust input validation with a helpful retry/tip message if the file is not found.
+Reads a log file line by line, counts how many lines contain a keyword (default: `error`), and prints the last 5 matching lines. Includes robust input validation and a helpful usage tip if the file is not found.
 
-**Concepts used:** `while IFS= read -r`, `if-then`, counter variables `$((COUNT + 1))`, `$1` `$2` arguments, `grep -i`, `tail -5`, `wc -l`
+**Concepts used:** `while IFS= read -r`, `if-then`, counter variables `$((COUNT + 1))`, `$1`/`$2` arguments, `grep -i`, `tail -5`, `wc -l`
 
 **Usage:**
 ```bash
-./script4_log_analyzer.sh /var/log/syslog error
-# or create a test log:
+# On Git Bash or Linux — create a test log first:
 echo -e "INFO: started\nERROR: module failed\nWARNING: low memory\nERROR: timeout" > test.log
 ./script4_log_analyzer.sh test.log error
+
+# On Linux with a real system log:
+./script4_log_analyzer.sh /var/log/syslog error
 ```
 
 ---
 
 ### Script 5 — Open Source Manifesto Generator
-Asks the user three interactive questions and generates a personalised open-source philosophy statement, saving it to `manifesto_<username>.txt`. Demonstrates string concatenation, file writing with `>` and `>>`, the `date` command, and includes a comment explaining the alias concept.
+Asks the user three interactive questions and generates a personalised open-source philosophy statement, saving it to `manifesto_<username>.txt`. The alias concept is demonstrated in a comment inside the script.
 
 **Concepts used:** `read -p`, string concatenation, `>` and `>>` file redirection, `date`, `whoami`, `cat`
 
@@ -91,8 +106,14 @@ Asks the user three interactive questions and generates a personalised open-sour
 
 ## ⚙️ Dependencies
 
-All scripts use standard GNU/Linux tools available by default on any Ubuntu/Debian system:
+### On Git Bash (Windows)
+Git Bash includes everything needed out of the box. Just ensure Git for Windows is installed:
 
+- Download from: https://git-scm.com/download/win
+- During installation, select **"Use Git Bash as default shell"**
+- All standard tools (`grep`, `awk`, `cut`, `ls`, `du`, `date`, `uname`) are included
+
+### On Linux (Ubuntu/Debian)
 ```bash
 sudo apt update
 sudo apt install git lsb-release coreutils grep gawk
@@ -102,13 +123,19 @@ sudo apt install git lsb-release coreutils grep gawk
 
 ## 🚀 How to Run
 
-### Step 1 — Clone the Repository
+### On Git Bash (Windows)
+
+**Step 1 — Install Git for Windows**
+Download and install from https://git-scm.com/download/win. This gives you Git Bash.
+
+**Step 2 — Clone or download this repository**
+Open Git Bash and run:
 ```bash
 git clone https://github.com/YOUR_USERNAME/oss-audit-ROLLNUMBER.git
 cd oss-audit-ROLLNUMBER
 ```
 
-### Step 2 — Make Scripts Executable
+**Step 3 — Make scripts executable**
 ```bash
 chmod +x script1_system_identity.sh
 chmod +x script2_package_inspector.sh
@@ -117,8 +144,7 @@ chmod +x script4_log_analyzer.sh
 chmod +x script5_manifesto_generator.sh
 ```
 
-### Step 3 — Run Each Script
-
+**Step 4 — Run each script**
 ```bash
 # Script 1: System Identity
 ./script1_system_identity.sh
@@ -129,15 +155,16 @@ chmod +x script5_manifesto_generator.sh
 # Script 3: Disk Auditor
 ./script3_disk_auditor.sh
 
-# Script 4: Log Analyzer (needs a log file)
-./script4_log_analyzer.sh /var/log/syslog error
-# or with a test file:
+# Script 4: Log Analyzer — create a test log first on Git Bash
 echo -e "INFO: ok\nERROR: fail\nERROR: timeout\nWARNING: low disk" > test.log
 ./script4_log_analyzer.sh test.log error
 
-# Script 5: Manifesto Generator (interactive)
+# Script 5: Manifesto Generator (interactive — it will ask you questions)
 ./script5_manifesto_generator.sh
 ```
+
+### On Linux (Ubuntu/Debian/Kali)
+Same steps — no changes needed. The scripts are fully compatible with native Linux.
 
 ---
 
@@ -146,26 +173,36 @@ echo -e "INFO: ok\nERROR: fail\nERROR: timeout\nWARNING: low disk" > test.log
 | Concept | Script(s) |
 |---|---|
 | Variables & command substitution `$()` | 1, 2, 3, 4, 5 |
-| `if-then-else` conditional logic | 2, 3, 4 |
+| `if-then-else` and `elif` conditional logic | 2, 3, 4 |
 | `case` statement | 2 |
 | `for` loop with arrays | 3 |
 | `while IFS= read -r` loop | 4 |
 | Counter variables & arithmetic `$(())` | 4 |
 | Command-line arguments `$1`, `$2` | 4 |
-| `read` for interactive user input | 5 |
-| File writing with `>` and `>>` | 5 |
+| `read -p` for interactive user input | 5 |
+| File writing with `>` (create) and `>>` (append) | 5 |
 | `grep`, `awk`, `cut`, `tail`, `wc` | 2, 3, 4 |
-| Aliases (concept demonstrated in comments) | 5 |
+| Aliases (concept demonstrated in script comment) | 5 |
 
 ---
 
 ## 📚 Key Learning
 
 Through this project I understood:
-- Why Linus Torvalds built Git — and how a proprietary tool's betrayal created the world's most important open-source tool
-- How the GPL v2 license protects software freedom and why it cannot be used in closed-source products
-- How Linux manages software installation, file permissions, and service directories
+- Why Linus Torvalds built Git — and how a proprietary tool's betrayal directly created the world's most important open-source tool
+- How the GPL v2 licence protects software freedom and prevents modified versions from going proprietary
+- How Git Bash brings Linux shell scripting to Windows — making open-source tooling accessible without a VM
 - How shell scripting connects automation to the open-source philosophy of transparency and sharing
+- How Linux manages file permissions, directory ownership, and software installation
+
+---
+
+## 🔗 References
+
+- Git Official Site: https://git-scm.com
+- GPL v2 Licence Text: https://spdx.org/licenses/GPL-2.0-only.html
+- GNU Bash Manual: https://gnu.org/software/bash/manual
+- The Linux Command Line (free): https://linuxcommand.org
 
 ---
 
