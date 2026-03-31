@@ -25,7 +25,7 @@ Git is the version control system Linus Torvalds wrote in approximately **ten da
 
 ## 💻 Environment
 
-These scripts were developed and tested on **Windows 11 using Git Bash** , the Unix-compatible shell that ships with Git for Windows. Git Bash provides a POSIX-compliant Bash environment on Windows, giving access to standard Linux commands (`grep`, `awk`, `ls`, `du`, `uname`, `whoami`, `date`, etc.) without needing a full Linux installation or virtual machine.
+These scripts were developed and tested on **Windows 10 using Git Bash** , the Unix-compatible shell that ships with Git for Windows. Git Bash provides a POSIX-compliant Bash environment on Windows, giving access to standard Linux commands (`grep`, `awk`, `ls`, `du`, `uname`, `whoami`, `date`, etc.) without needing a full Linux installation or virtual machine.
 
 **Shell:** GNU Bash (bundled with Git for Windows)
 **Tested on:** Windows 10 + Git Bash 2.x
